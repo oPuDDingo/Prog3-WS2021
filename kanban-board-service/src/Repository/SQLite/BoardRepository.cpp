@@ -87,7 +87,7 @@ std::optional<Column> BoardRepository::getColumn(int id) {
     result = sqlite3_exec(database, sqlGetColumn.c_str(), BoardRepository::getColumnCallback, pColumn, &errorMessage);
     handleSQLError(result, errorMessage);
 
-    if (SQLITE_OK == result && &column.getId != -1) {
+    if (SQLITE_OK == result && column.getId() != -1) {
         return column;
     } else {
         return nullopt;
@@ -150,13 +150,13 @@ std::optional<Item> BoardRepository::getItem(int columnId, int itemId) {
     int result = 0;
     char *errorMessage = nullptr;
 
-    vektor<Item> items;
+    vector<Item> items;
 
     result = sqlite3_exec(database, sqlGetItem.c_str(), BoardRepository::getItemsCallback, &items, &errorMessage);
     handleSQLError(result, errorMessage);
 
-    if (SQLITE_OK == result && &column.getId != -1) {
-        return column;
+    if (SQLITE_OK == result && items.size() != 0) {
+        return items[0];
     } else {
         return nullopt;
     }
