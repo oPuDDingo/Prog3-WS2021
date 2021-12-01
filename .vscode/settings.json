@@ -1,4 +1,9 @@
 {
+    "cmake.generator": "MinGW Makefiles",
+    "cmake.cmakePath": "C:/msys64/mingw64/bin/cmake.exe",
+    "cmake.mingwSearchDirs": ["C:/msys64/mingw64"],
+    "cmake.preferredGenerators": ["MinGW Makefiles"],
+
     "editor.formatOnSave": true,
     "editor.tabSize": 4,
     "editor.codeActionsOnSave": {
@@ -29,5 +34,6 @@
     "python.testing.unittestEnabled": false,
     "python.testing.nosetestsEnabled": false,
     "python.testing.pytestEnabled": true,
-    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+    "C_Cpp.errorSquiggles": "Disabled"
 }

@@ -1,5 +1,6 @@
 #include "BoardRepository.hpp"
 #include "Core/Exception/NotImplementedException.hpp"
+#include <ctime>
 #include <filesystem>
 #include <string.h>
 
@@ -61,7 +62,7 @@ void BoardRepository::initialize() {
     handleSQLError(result, errorMessage);
 
     // only if dummy data is needed ;)
-    //createDummyData();
+    // createDummyData();
 }
 
 Board BoardRepository::getBoard() {
@@ -74,10 +75,42 @@ std::vector<Column> BoardRepository::getColumns() {
 
 std::optional<Column> BoardRepository::getColumn(int id) {
     throw NotImplementedException();
+    /*
+        string sqlGetColumn =
+            "SELECT * FROM column WHERE id=" + to_string(id);
+
+        int result = 0;
+        char *errorMessage = nullptr;
+
+        result = sqlite3_exec(database, sqlGetColumn.c_str(), NULL, 0, &errorMessage);
+        handleSQLError(result, errorMessage);
+
+        if (SQLITE_OK == result) {
+            sqlite3_callback
+        }
+    */
 }
 
 std::optional<Column> BoardRepository::postColumn(std::string name, int position) {
-    throw NotImplementedException();
+
+    // Eingefügt
+    string sqlPostItem =
+        "INSERT INTO column('name', 'position') "
+        "VALUES('" +
+        name + "', '" + to_string(position) + "')";
+
+    int result = 0;
+    char *errorMessage = nullptr;
+
+    result = sqlite3_exec(database, sqlPostItem.c_str(), NULL, 0, &errorMessage);
+    handleSQLError(result, errorMessage);
+
+    if (SQLITE_OK == result) {
+        int columnId = sqlite3_last_insert_rowid(database);
+        return Column(columnId, name, position);
+    }
+
+    return std::nullopt;
 }
 
 std::optional<Prog3::Core::Model::Column> BoardRepository::putColumn(int id, std::string name, int position) {
@@ -85,7 +118,21 @@ std::optional<Prog3::Core::Model::Column> BoardRepository::putColumn(int id, std
 }
 
 void BoardRepository::deleteColumn(int id) {
-    throw NotImplementedException();
+
+    // Eingefügt
+    string sqlPostItem =
+        "DELETE FROM column WHERE id = " + std::to_string(id);
+
+    int result = 0;
+    char *errorMessage = nullptr;
+
+    result = sqlite3_exec(database, sqlPostItem.c_str(), NULL, 0, &errorMessage);
+    handleSQLError(result, errorMessage);
+
+    if (SQLITE_OK == result) {
+
+        std::cout << "Erfolgreich gelöscht!" << endl;
+    }
 }
 
 std::vector<Item> BoardRepository::getItems(int columnId) {
@@ -97,7 +144,28 @@ std::optional<Item> BoardRepository::getItem(int columnId, int itemId) {
 }
 
 std::optional<Item> BoardRepository::postItem(int columnId, std::string title, int position) {
-    throw NotImplementedException();
+
+    // Eingefügt
+    time_t now = time(0);
+    char *datetime = ctime(&now); // * = definieren das eine variable als Zeiger deklariert werden soll
+
+    string sqlPostItem =
+        "INSERT INTO item ('title', 'date', 'position', 'column_id') "
+        "VALUES ('" +
+        title + "', '" + datetime + "', " + to_string(position) + ", " + to_string(columnId) + ");";
+
+    int result = 0;
+    char *errorMessage = nullptr;
+
+    result = sqlite3_exec(database, sqlPostItem.c_str(), NULL, 0, &errorMessage);
+    handleSQLError(result, errorMessage);
+
+    int itemId = INVALID_ID;
+    if (SQLITE_OK == result) {
+        itemId = sqlite3_last_insert_rowid(database);
+        return Item(itemId, title, position, datetime);
+    }
+    return std::nullopt;
 }
 
 std::optional<Prog3::Core::Model::Item> BoardRepository::putItem(int columnId, int itemId, std::string title, int position) {
@@ -105,7 +173,25 @@ std::optional<Prog3::Core::Model::Item> BoardRepository::putItem(int columnId, i
 }
 
 void BoardRepository::deleteItem(int columnId, int itemId) {
-    throw NotImplementedException();
+
+    // Eingefügt
+    /*
+    time_t now = time(0);
+    char *datetime = ctime(&now); // * = definieren das eine variable als Zeiger deklariert werden soll
+    */
+    string sqlPostItem =
+        "DELETE FROM item WHERE column_id = " + std::to_string(columnId) + " AND id = " + std::to_string(itemId);
+
+    int result = 0;
+    char *errorMessage = nullptr;
+
+    result = sqlite3_exec(database, sqlPostItem.c_str(), NULL, 0, &errorMessage);
+    handleSQLError(result, errorMessage);
+
+    itemId = INVALID_ID;
+    if (SQLITE_OK == result) {
+        std::cout << "Erfolgreich gelöscht!" << endl;
+    }
 }
 
 void BoardRepository::handleSQLError(int statementResult, char *errorMessage) {
