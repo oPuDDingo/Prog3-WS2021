@@ -29,11 +29,18 @@ std::string BoardManager::getColumns() {
 std::string BoardManager::getColumn(int columnId) {
 
     std::optional<Column> column = repository.getColumn(columnId);
+
+    string tmp;
+
     if (column) {
-        return parser.convertToApiString(column.value());
+        tmp = parser.convertToApiString(column.value());
     } else {
-        return parser.getEmptyResponseString();
+        tmp = parser.getEmptyResponseString();
     }
+
+    std::cout << tmp << endl;
+
+    return tmp;
 }
 
 std::string BoardManager::postColumn(std::string request) {

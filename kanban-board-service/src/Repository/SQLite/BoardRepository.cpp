@@ -2,7 +2,12 @@
 #include "Core/Exception/NotImplementedException.hpp"
 #include <ctime>
 #include <filesystem>
+#include <iterator>
+#include <sstream>
 #include <string.h>
+#include <string>
+#include <tr1/unordered_map>
+#include <vector>
 
 using namespace Prog3::Repository::SQLite;
 using namespace Prog3::Core::Model;
@@ -62,7 +67,7 @@ void BoardRepository::initialize() {
     handleSQLError(result, errorMessage);
 
     // only if dummy data is needed ;)
-    // createDummyData();
+    createDummyData();
 }
 
 Board BoardRepository::getBoard() {
@@ -70,28 +75,74 @@ Board BoardRepository::getBoard() {
 }
 
 std::vector<Column> BoardRepository::getColumns() {
-    throw NotImplementedException();
-}
 
-std::optional<Column> BoardRepository::getColumn(int id) {
-
-    string sqlGetColumn =
-        "SELECT * FROM column WHERE id=" + to_string(id) + ";";
+    string sqlGetIds =
+        "SELECT id FROM column;";
 
     int result = 0;
     char *errorMessage = nullptr;
 
-    Column column(-1, "", 0);
-    Column *pColumn = &column;
+    vector<int> columnIds;
 
-    result = sqlite3_exec(database, sqlGetColumn.c_str(), BoardRepository::getColumnCallback, pColumn, &errorMessage);
+    vector<Column> columns;
+
+    result = sqlite3_exec(database, sqlGetIds.c_str(), BoardRepository::getIdsCallback, &columnIds, &errorMessage);
     handleSQLError(result, errorMessage);
 
-    if (SQLITE_OK == result && column.getId() != -1) {
-        return column;
-    } else {
+    if (SQLITE_OK != result) {
+        return vector<Column>();
+    }
+    for (int id : columnIds) {
+        optional<Column> tmp = getColumn(id);
+        if (tmp.has_value()) {
+            columns.push_back(tmp.value());
+        }
+    }
+    return columns;
+}
+
+std::optional<Column> BoardRepository::getColumn(int id) {
+
+    /*
+        string sqlGetColumn = "SELECT * FROM column WHERE id=" + to_string(id) + ";";
+
+        int result = 0;
+        char *errorMessage = nullptr;
+
+        Column column(-1, "", 0);
+        Column *pColumn = &column;
+
+        result = sqlite3_exec(database, sqlGetColumn.c_str(), BoardRepository::getColumnCallback, pColumn, &errorMessage);
+        handleSQLError(result, errorMessage);
+
+        if (SQLITE_OK == result && column.getId() != -1) {
+            return column;
+        } else {
+            return nullopt;
+        }*/
+
+    string sqlSelect = "SELECT * FROM column WHERE id=" + to_string(id) + ";";
+
+    char *errorMessage = nullptr;
+    // das erstellen von "column" wird zum reservieren vom Speicherplatz benötigt
+    Column column(-1, "", 0);
+    Column *pcolumn = &column;
+
+    vector<Item> items = getItems(id);
+    vector<Item> *pitems = &items;
+
+    int result = sqlite3_exec(database, sqlSelect.c_str(), BoardRepository::getColumnCallback, pcolumn, &errorMessage);
+    handleSQLError(result, errorMessage);
+
+    if (result != SQLITE_OK || column.getId() == -1) {
         return nullopt;
     }
+    // statt auto -> Item
+    for (auto item : items) {
+        column.addItem(item);
+    }
+
+    return column;
 }
 
 std::optional<Column> BoardRepository::postColumn(std::string name, int position) {
@@ -124,7 +175,7 @@ void BoardRepository::deleteColumn(int id) {
 
     // Eingefügt
     string sqlPostItem =
-        "DELETE FROM column WHERE id = " + std::to_string(id) + ";";
+        "DELETE FROM column WHERE id = " + to_string(id) + ";";
 
     int result = 0;
     char *errorMessage = nullptr;
@@ -139,7 +190,23 @@ void BoardRepository::deleteColumn(int id) {
 }
 
 std::vector<Item> BoardRepository::getItems(int columnId) {
-    throw NotImplementedException();
+
+    string sqlGetItems =
+        "SELECT * FROM item WHERE column_id=" + to_string(columnId) + ";";
+
+    int result = 0;
+    char *errorMessage = nullptr;
+
+    vector<Item> items;
+
+    result = sqlite3_exec(database, sqlGetItems.c_str(), BoardRepository::getItemsCallback, &items, &errorMessage);
+    handleSQLError(result, errorMessage);
+
+    if (SQLITE_OK == result && items.size() != 0) {
+        return items;
+    } else {
+        return vector<Item>();
+    }
 }
 
 std::optional<Item> BoardRepository::getItem(int columnId, int itemId) {
@@ -199,7 +266,7 @@ void BoardRepository::deleteItem(int columnId, int itemId) {
     char *datetime = ctime(&now); // * = definieren das eine variable als Zeiger deklariert werden soll
     */
     string sqlPostItem =
-        "DELETE FROM item WHERE column_id = " + std::to_string(columnId) + " AND id = " + std::to_string(itemId);
+        "DELETE FROM item WHERE column_id = " + to_string(columnId) + " AND id = " + to_string(itemId);
 
     int result = 0;
     char *errorMessage = nullptr;
@@ -207,7 +274,6 @@ void BoardRepository::deleteItem(int columnId, int itemId) {
     result = sqlite3_exec(database, sqlPostItem.c_str(), NULL, 0, &errorMessage);
     handleSQLError(result, errorMessage);
 
-    itemId = INVALID_ID;
     if (SQLITE_OK == result) {
         std::cout << "Erfolgreich gelöscht!" << endl;
     }
@@ -283,20 +349,40 @@ int BoardRepository::getItemsCallback(void *data, int numberOfColumns, char **fi
 
     vector<Item> *pItems = static_cast<vector<Item> *>(data);
 
-    vector<std::string> values;
+    vector<string> values;
 
     for (int i = 0; i < numberOfColumns; i++) {
-        values.push_back(*(fieldValues));
+        values.push_back(*(fieldValues++));
     }
 
-    int id = std::stoi(values[0]);
+    int id = stoi(values[0]);
     string title = values[1];
     string date = values[2];
-    int position = std::stoi(values[3]);
+    int position = stoi(values[3]);
 
     Item item(id, title, position, date);
 
     pItems->push_back(item);
+
+    return 0;
+}
+
+int BoardRepository::getIdsCallback(void *data, int numberOfColumns, char **fieldValues, char **columnNames) {
+
+    vector<int> *pIds = static_cast<vector<int> *>(data);
+    /*
+        vector<int> values;
+
+        if (numberOfColumns == 0) {
+            return 0;
+        }
+
+
+          for(int i = 0; i < numberOfColumns; i++){
+            values.push_back(*(fieldValues++));
+          }
+      */
+    pIds->push_back(atoi(fieldValues[0]));
 
     return 0;
 }
