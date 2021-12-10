@@ -71,7 +71,13 @@ void BoardRepository::initialize() {
 }
 
 Board BoardRepository::getBoard() {
-    throw NotImplementedException();
+    // Eingefügt Musterlösung
+    Board board = Board(boardTitle);
+
+    vector<Column> columns = getColumns();
+    board.setColumns(columns);
+
+    return board;
 }
 
 std::vector<Column> BoardRepository::getColumns() {
@@ -99,11 +105,27 @@ std::vector<Column> BoardRepository::getColumns() {
         }
     }
     return columns;
+
+    // Eingefügt Musterlösung
+    // std::vector<Column> columns;
+
+    // string sqlQueryColumns =
+    //     "SELECT column.id, column.name, column.position, item.id, item.title, item.position, item.date from column "
+    //     "left join item on item.column_id = column.id "
+    //     "order by column.position, item.position";
+
+    // int result = 0;
+    // char *errorMessage = nullptr;
+
+    // result = sqlite3_exec(database, sqlQueryColumns.c_str(), queryColumnsCallback, &columns, &errorMessage);
+    // handleSQLError(result, errorMessage);
+
+    // return columns;
 }
 
 std::optional<Column> BoardRepository::getColumn(int id) {
 
-    /*
+    /*  Meine Lösung
         string sqlGetColumn = "SELECT * FROM column WHERE id=" + to_string(id) + ";";
 
         int result = 0;
@@ -121,6 +143,28 @@ std::optional<Column> BoardRepository::getColumn(int id) {
             return nullopt;
         }*/
 
+    // Eingefügt Musterlösung
+    // std::vector<Column> columns;
+
+    // string sqlQueryColumns =
+    //     "SELECT column.id, column.name, column.position, item.id, item.title, item.position, item.date from column "
+    //     "left join item on item.column_id = column.id where column.id = " +
+    //     to_string(id) +
+    //     " order by column.position, item.position";
+
+    // int result = 0;
+    // char *errorMessage = nullptr;
+
+    // result = sqlite3_exec(database, sqlQueryColumns.c_str(), queryColumnsCallback, &columns, &errorMessage);
+    // handleSQLError(result, errorMessage);
+
+    // if (columns.size() == 1) {
+    //     return columns.front();
+    // } else {
+    //     return std::nullopt;
+    // }
+
+    // Tim und Tom Lösung
     string sqlSelect = "SELECT * FROM column WHERE id=" + to_string(id) + ";";
 
     char *errorMessage = nullptr;
@@ -147,7 +191,7 @@ std::optional<Column> BoardRepository::getColumn(int id) {
 
 std::optional<Column> BoardRepository::postColumn(std::string name, int position) {
 
-    // Eingefügt
+    // Eingefügt Musterlösung
     string sqlPostItem =
         "INSERT INTO column('name', 'position') "
         "VALUES('" +
@@ -168,12 +212,25 @@ std::optional<Column> BoardRepository::postColumn(std::string name, int position
 }
 
 std::optional<Prog3::Core::Model::Column> BoardRepository::putColumn(int id, std::string name, int position) {
-    throw NotImplementedException();
+    // Eingefügt Musterlösung
+    string sqlUpdateColumn =
+        "UPDATE column "
+        "SET name = '" +
+        name + "', position = '" + to_string(position) +
+        "' WHERE id = " + to_string(id);
+
+    int result = 0;
+    char *errorMessage = nullptr;
+
+    result = sqlite3_exec(database, sqlUpdateColumn.c_str(), NULL, 0, &errorMessage);
+    handleSQLError(result, errorMessage);
+
+    return getColumn(id);
 }
 
 void BoardRepository::deleteColumn(int id) {
 
-    // Eingefügt
+    // von mir
     string sqlPostItem =
         "DELETE FROM column WHERE id = " + to_string(id) + ";";
 
@@ -187,10 +244,30 @@ void BoardRepository::deleteColumn(int id) {
 
         std::cout << "Erfolgreich gelöscht!" << endl;
     }
+
+    // Eingefügt Musterlösung
+    // string sqlDeleteColumnItems =
+    //     "DELETE FROM item "
+    //     "WHERE item.column_id = " +
+    //     to_string(id);
+
+    // string sqlDeleteColumn =
+    //     "DELETE FROM column "
+    //     "WHERE column.id = " +
+    //     to_string(id);
+
+    // int result = 0;
+    // char *errorMessage = nullptr;
+
+    // result = sqlite3_exec(database, sqlDeleteColumnItems.c_str(), NULL, 0, &errorMessage);
+    // handleSQLError(result, errorMessage);
+
+    // result = sqlite3_exec(database, sqlDeleteColumn.c_str(), NULL, 0, &errorMessage);
+    // handleSQLError(result, errorMessage);
 }
 
 std::vector<Item> BoardRepository::getItems(int columnId) {
-
+    // von mir
     string sqlGetItems =
         "SELECT * FROM item WHERE column_id=" + to_string(columnId) + ";";
 
@@ -207,6 +284,22 @@ std::vector<Item> BoardRepository::getItems(int columnId) {
     } else {
         return vector<Item>();
     }
+    // EIngefügt Musterlösung
+    // std::vector<Item> items;
+
+    // string sqlQueryItems =
+    //     "SELECT item.id, item.title, item.position, item.date from item "
+    //     "where item.column_id = " +
+    //     std::to_string(columnId) +
+    //     " order by item.position";
+
+    // int result = 0;
+    // char *errorMessage = nullptr;
+
+    // result = sqlite3_exec(database, sqlQueryItems.c_str(), queryItemsCallback, &items, &errorMessage);
+    // handleSQLError(result, errorMessage);
+
+    // return items;
 }
 
 std::optional<Item> BoardRepository::getItem(int columnId, int itemId) {
@@ -227,11 +320,32 @@ std::optional<Item> BoardRepository::getItem(int columnId, int itemId) {
     } else {
         return nullopt;
     }
+
+    // Eingefügt Musterlösung
+    // std::vector<Item> items;
+
+    // string sqlQueryItems =
+    //     "SELECT item.id, item.title, item.position, item.date from item "
+    //     "where item.column_id = " +
+    //     std::to_string(columnId) + " and item.id = " + std::to_string(itemId) +
+    //     " order by item.position";
+
+    // int result = 0;
+    // char *errorMessage = nullptr;
+
+    // result = sqlite3_exec(database, sqlQueryItems.c_str(), queryItemsCallback, &items, &errorMessage);
+    // handleSQLError(result, errorMessage);
+
+    // if (items.size() == 1) {
+    //     return items.front();
+    // } else {
+    //     return std::nullopt;
+    // }
 }
 
 std::optional<Item> BoardRepository::postItem(int columnId, std::string title, int position) {
 
-    // Eingefügt
+    // Eingefügt Musterlösung
     time_t now = time(0);
     char *datetime = ctime(&now); // * = definieren das eine variable als Zeiger deklariert werden soll
 
@@ -242,20 +356,34 @@ std::optional<Item> BoardRepository::postItem(int columnId, std::string title, i
 
     int result = 0;
     char *errorMessage = nullptr;
-
     result = sqlite3_exec(database, sqlPostItem.c_str(), NULL, 0, &errorMessage);
     handleSQLError(result, errorMessage);
 
     int itemId = INVALID_ID;
+
     if (SQLITE_OK == result) {
         itemId = sqlite3_last_insert_rowid(database);
         return Item(itemId, title, position, datetime);
     }
     return std::nullopt;
+
+    return getItem(columnId, itemId);
 }
 
 std::optional<Prog3::Core::Model::Item> BoardRepository::putItem(int columnId, int itemId, std::string title, int position) {
-    throw NotImplementedException();
+
+    // Eingefügt Musterlösung
+    string sqlUpdateItem =
+        "UPDATE item SET title = '" + title + "', position = " + to_string(position) +
+        " WHERE item.column_id = " + to_string(columnId) + " AND item.id = " + to_string(itemId);
+
+    int result = 0;
+    char *errorMessage = nullptr;
+
+    result = sqlite3_exec(database, sqlUpdateItem.c_str(), NULL, 0, &errorMessage);
+    handleSQLError(result, errorMessage);
+
+    return getItem(columnId, itemId);
 }
 
 void BoardRepository::deleteItem(int columnId, int itemId) {
@@ -277,6 +405,19 @@ void BoardRepository::deleteItem(int columnId, int itemId) {
     if (SQLITE_OK == result) {
         std::cout << "Erfolgreich gelöscht!" << endl;
     }
+
+    // Eingefügt Musterlösung
+    // string sqlQueryItem =
+    //     "DELETE FROM item "
+    //     "WHERE item.column_id = " +
+    //     to_string(columnId) +
+    //     " AND item.id = " + to_string(itemId);
+
+    // int result = 0;
+    // char *errorMessage = nullptr;
+
+    // result = sqlite3_exec(database, sqlQueryItem.c_str(), NULL, 0, &errorMessage);
+    // handleSQLError(result, errorMessage);
 }
 
 void BoardRepository::handleSQLError(int statementResult, char *errorMessage) {
@@ -386,3 +527,84 @@ int BoardRepository::getIdsCallback(void *data, int numberOfColumns, char **fiel
 
     return 0;
 }
+
+// Eingefügt Musterlösung
+// Item BoardRepository::getItemFromCallback(char **fieldValues, int startIndex) {
+//     int index = startIndex;
+
+//     int itemId = fieldValues[index] ? atoi(fieldValues[index]) : INVALID_ID;
+//     index++;
+
+//     string title = fieldValues[index] ? fieldValues[index] : "";
+//     index++;
+
+//     int position = fieldValues[index] ? atoi(fieldValues[index]) : 0;
+//     index++;
+
+//     string timestamp = fieldValues[index] ? fieldValues[index] : "";
+
+//     Item item(itemId, title, position, timestamp);
+//     return item;
+// }
+
+// Column BoardRepository::getColumnFromCallback(char **fieldValues, int startIndex) {
+//     int index = startIndex;
+
+//     int columnId = fieldValues[index] ? atoi(fieldValues[index]) : INVALID_ID;
+//     index++;
+
+//     string name = fieldValues[index] ? fieldValues[index] : "";
+//     index++;
+
+//     int position = fieldValues[index] ? atoi(fieldValues[index]) : 0;
+//     index++;
+
+//     Column column(columnId, name, position);
+//     return column;
+// }
+
+// int BoardRepository::queryColumnsCallback(void *data, int numberOfColumns, char **fieldValues, char **columnNames) {
+
+//     std::vector<Column> *pColumns = static_cast<std::vector<Column> *>(data);
+//     std::vector<Column> &columns = *pColumns;
+
+//     Item item = getItemFromCallback(fieldValues, 3);
+
+//     int columnId = fieldValues[0] ? atoi(fieldValues[0]) : INVALID_ID;
+//     bool wasColumnAlreadyAdded = false;
+
+//     for (Column &column : columns) {
+//         if (column.getId() == columnId) {
+//             wasColumnAlreadyAdded = true;
+//             if (isValid(item.getId())) {
+//                 column.addItem(item);
+//             }
+//             break;
+//         }
+//     }
+
+//     if (false == wasColumnAlreadyAdded) {
+//         Column column = getColumnFromCallback(fieldValues, 0);
+
+//         if (isValid(item.getId())) {
+//             column.addItem(item);
+//         }
+
+//         if (isValid(column.getId())) {
+//             columns.push_back(column);
+//         }
+//     }
+
+//     return 0;
+// }
+
+// int BoardRepository::queryItemsCallback(void *data, int numberOfColumns, char **fieldValues, char **columnNames) {
+
+//     std::vector<Item> *result = static_cast<std::vector<Item> *>(data);
+
+//     Item item = getItemFromCallback(fieldValues, 0);
+//     if (isValid(item.getId())) {
+//         result->push_back(item);
+//     }
+//     return 0;
+// }

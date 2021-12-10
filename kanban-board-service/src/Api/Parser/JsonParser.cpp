@@ -12,11 +12,16 @@ using namespace rapidjson;
 using namespace std;
 
 string JsonParser::convertToApiString(Board &board) {
-    throw NotImplementedException();
+    // Eingefügt Musterlösung
+    Document document;
+    Document::AllocatorType &allocator = document.GetAllocator();
+
+    Value jsonBoard = getJsonValueFromModel(board, allocator);
+    return jsonValueToString(jsonBoard);
 }
 
 string JsonParser::convertToApiString(Column &column) {
-    // Eingefügt
+    // Eingefügt Musterlösung
     Document document(kObjectType);
 
     Value jsonColumn = getJsonValueFromModel(column, document.GetAllocator());
@@ -93,10 +98,20 @@ string JsonParser::convertToApiString(std::vector<Column> &columns) {
     Value jsonColumns = getJsonValueFromModels(columns, document.GetAllocator());
     result = jsonValueToString(jsonColumns);
     return result;
+
+    // Eingefügt Musterlösung
+    // Document document(kArrayType);
+    // Document::AllocatorType &allocator = document.GetAllocator();
+
+    // for (Column &column : columns) {
+    //     Value jsonColumn = getJsonValueFromModel(column, allocator);
+    //     document.PushBack(jsonColumn, allocator);
+
+    // return jsonValueToString(document);
 }
 
 string JsonParser::convertToApiString(Item &item) {
-    // Eingefügt
+    // Eingefügt Musterlösung
     string result = EMPTY_JSON;
     Document document(kObjectType);
 
@@ -115,10 +130,21 @@ string JsonParser::convertToApiString(std::vector<Item> &items) {
     Value jsonItems = getJsonValueFromModels(items, document.GetAllocator());
     result = jsonValueToString(jsonItems);
     return result;
+
+    // Eingefügt Musterlösung
+    // Document document(kArrayType);
+    // Document::AllocatorType &allocator = document.GetAllocator();
+
+    // for (Item &item : items) {
+    //     Value jsonItem = getJsonValueFromModel(item, allocator);
+    //     document.PushBack(jsonItem, allocator);
+    // }
+
+    // return jsonValueToString(document);
 }
 
 std::optional<Column> JsonParser::convertColumnToModel(int columnId, std::string &request) {
-    // Eingefügt
+    // Eingefügt Musterlösung
     std::optional<Column> resultColumn;
     Document document;
     document.Parse(request.c_str());
@@ -132,7 +158,7 @@ std::optional<Column> JsonParser::convertColumnToModel(int columnId, std::string
 }
 
 std::optional<Item> JsonParser::convertItemToModel(int itemId, std::string &request) {
-    // Eingefügt
+    // Eingefügt Musterlösung
     std::optional<Item> resultItem;
 
     Document document;
@@ -144,6 +170,60 @@ std::optional<Item> JsonParser::convertItemToModel(int itemId, std::string &requ
         resultItem = Item(itemId, title, position, "");
     }
     return resultItem;
+}
+
+// Eingefügt Musterlösung
+// string JsonParser::jsonValueToString(rapidjson::Value const &json) {
+//     StringBuffer buffer;
+//     Writer<StringBuffer> writer(buffer);
+//     json.Accept(writer);
+
+//     return buffer.GetString();
+// }
+
+// rapidjson::Value JsonParser::getJsonValueFromModel(Item const &item, rapidjson::Document::AllocatorType &allocator) {
+//     Value jsonItem(kObjectType);
+
+//     jsonItem.AddMember("id", item.getId(), allocator);
+//     jsonItem.AddMember("title", Value(item.getTitle().c_str(), allocator), allocator);
+//     jsonItem.AddMember("position", item.getPos(), allocator);
+//     jsonItem.AddMember("timestamp", Value(item.getTimestamp().c_str(), allocator), allocator);
+
+//     return jsonItem;
+// }
+
+// rapidjson::Value JsonParser::getJsonValueFromModel(Column const &column, rapidjson::Document::AllocatorType &allocator) {
+//     Value jsonColumn(kObjectType);
+
+//     jsonColumn.AddMember("id", column.getId(), allocator);
+//     jsonColumn.AddMember("name", Value(column.getName().c_str(), allocator), allocator);
+//     jsonColumn.AddMember("position", column.getPos(), allocator);
+
+//     Value jsonItems(kArrayType);
+
+//     for (Item const &item : column.getItems()) {
+//         Value jsonItem = getJsonValueFromModel(item, allocator);
+//         jsonItems.PushBack(jsonItem, allocator);
+//     }
+
+//     jsonColumn.AddMember("items", jsonItems, allocator);
+
+//     return jsonColumn;
+// }
+
+rapidjson::Value JsonParser::getJsonValueFromModel(Board &board, rapidjson::Document::AllocatorType &allocator) {
+    Value jsonBoard(kObjectType);
+    Value jsonColumns(kArrayType);
+
+    for (Column &column : board.getColumns()) {
+        Value jsonColumn = getJsonValueFromModel(column, allocator);
+        jsonColumns.PushBack(jsonColumn, allocator);
+    }
+
+    jsonBoard.AddMember("title", Value(board.getTitle().c_str(), allocator), allocator);
+    jsonBoard.AddMember("columns", jsonColumns, allocator);
+
+    return jsonBoard;
 }
 
 bool JsonParser::isValidColumn(rapidjson::Document const &document) {
