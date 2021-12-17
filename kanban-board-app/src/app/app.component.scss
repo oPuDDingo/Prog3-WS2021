@@ -46,8 +46,9 @@ svg.material-icons:not(:last-child) {
 .card-container {
   display: flex;
   flex-wrap: wrap;
+  flex-direction: column;
   justify-content: center;
-  margin-top: 16px;
+  margin-top: 100px;
 }
 
 .card {
@@ -225,7 +226,7 @@ svg#clouds {
   bottom: -160px;
   left: -230px;
   z-index: -10;
-  width: 1920px;
+  width: 2400px;
 }
 
 //--------------------------------------
@@ -261,12 +262,12 @@ svg#clouds {
   }
 }
 
-//-----------------------------------------
-
+//-----------------------------------------------------------------------------------
 #navbar {
-  background-color: #333; /* Black background color */
+  background-color: rgb(51, 51, 51); /* Black background color */
   position: fixed; /* Make it stick/fixed */
-  top: 60px; /* Hide the navbar 50 px outside of the top view */
+  left: 0px;
+  top: 80px; /* Hide the navbar 50 px outside of the top view */
   width: 100%; /* Full width */
   transition: top 0.3s; /* Transition effect when sliding down (and up) */
 }
@@ -284,4 +285,19 @@ svg#clouds {
 #navbar a:hover {
   background-color: #ddd;
   color: black;
+}
+//-----------------------------------------------------------------------------------
+
+.ghostgif {
+  width: 200px;
+  border-radius: 100px;
+  float: right;
+  margin-top: 30px;
+}
+
+.board {
+  display: flex;
+  background-color: #89c779;
+  border-radius: 100px;
+  align-items: flex-start;
 }

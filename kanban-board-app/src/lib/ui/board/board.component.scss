@@ -1,0 +1,17 @@
+.board {
+  display: flex;
+  background-color: #89c779;
+  border-radius: 100px;
+  align-items: flex-start;
+  margin-top: 100px;
+}
+
+.title {
+  height: 10%;
+  width: 10%;
+  padding: 1%;
+  margin-left: 50px;
+  margin-top: 10px;
+  font-weight: 600;
+  font-size: 200%;
+}
