@@ -1,5 +1,17 @@
 
 <div class="card-container">
-  <div class="title">{{title}}</div>
+  <div class="title"
+  (mouseover)="showDeleteButton = true"
+  (mouseleave)="showDeleteButton = false"
+  >{{title}}  {{id}}
+  <img
+      *ngIf="showDeleteButton"
+      (click)="deleteColumn(id)"
+      class="delete-icon"
+      src="https://mpng.subpng.com/20210118/rfe/transparent-garbage-icon-trash-icon-60053885a9b151.9234442016109548856951.jpg"
+    />
+
+</div>
   <item *ngFor="let item of items" [title]="item.title"></item>
 </div>
+

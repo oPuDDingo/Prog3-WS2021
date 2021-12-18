@@ -4,6 +4,8 @@
   border-radius: 100px;
   align-items: flex-start;
   margin-top: 100px;
+  height: 80px;
+  // justify-content: center;
 }
 
 .title {
@@ -14,4 +16,30 @@
   margin-top: 10px;
   font-weight: 600;
   font-size: 200%;
+  // clear: both;
+  // display: inline-block;
+  // overflow: hidden;
+  white-space: nowrap;
+  transform: translate(280%, 10%);
 }
+
+// .title:hover {
+//   background-color: #ddd;
+//   color: black;
+
+// }
+
+#myimage {
+  height: 80px;
+  width: 100px;
+  border-radius: 300px;
+}
+
+button {
+  border-radius: 300px;
+  margin-left: 100px;
+}
+
+// function #addFunction(){
+
+// }

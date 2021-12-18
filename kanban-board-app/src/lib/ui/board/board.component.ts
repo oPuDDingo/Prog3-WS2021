@@ -8,7 +8,7 @@ import { ColumnModel } from '../../../lib/data-access/models/columnModel';
 })
 export class BoardComponent {
   @Input()
-  title = 'board';
+  title = 'Let me guide you!';
 
   @Input()
   columns: ColumnModel[] = [
@@ -52,24 +52,38 @@ export class BoardComponent {
       ],
     },
 
-    {
-      id: 2,
-      name: 'done',
-      position: 2,
-      items: [
-        {
-          id: 0,
-          title: 'first task',
-          position: 0,
-          timestamp: '2021-12-09T10:04:42.058Z',
-        },
-        {
-          id: 1,
-          title: 'second task',
-          position: 1,
-          timestamp: '2021-12-09T10:04:42.058Z',
-        },
-      ],
-    },
+    // {
+    //   id: 2,
+    //   name: 'done',
+    //   position: 2,
+    //   items: [
+    //     {
+    //       id: 0,
+    //       title: 'first task',
+    //       position: 0,
+    //       timestamp: '2021-12-09T10:04:42.058Z',
+    //     },
+    //     {
+    //       id: 1,
+    //       title: 'second task',
+    //       position: 1,
+    //       timestamp: '2021-12-09T10:04:42.058Z',
+    //     },
+    //   ],
+    // },
   ];
+
+  addFunction() {
+    this.columns.push({
+      id: (Math.random() * 10000) | 0,
+      name: '',
+      position: 0,
+      items: [],
+    });
+  }
+
+  deleteFunction(id: number) {
+    // var position: number = this.columns.findIndex((element)=> element.id == id)
+    this.columns = this.columns.filter((element) => element.id != id);
+  }
 }
