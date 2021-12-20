@@ -1,6 +1,6 @@
 export interface ItemModel {
   id: number;
   title: string;
-  position: number;
+  // position: number;
   timestamp: string;
 }

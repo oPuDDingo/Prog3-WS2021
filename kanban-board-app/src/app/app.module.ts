@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BoardComponent } from 'src/lib/ui/board/board.component';
 import { ColumnComponent } from 'src/lib/ui/column/column.component';
@@ -15,7 +16,7 @@ import { AppComponent } from './app.component';
     ColumnComponent,
     ItemComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule],
+  imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [],
   bootstrap: [AppComponent],
 })

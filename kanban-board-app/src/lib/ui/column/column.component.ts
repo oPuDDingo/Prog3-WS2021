@@ -9,27 +9,28 @@ import { ItemModel } from '../../../lib/data-access/models/itemModel';
 export class ColumnComponent {
   @Input()
   title = 'column';
-
+  // column: ColumnModel;
   @Input()
   id: number;
 
   @Input()
   items: ItemModel[];
 
-  @Output() deleteColumnEvent = new EventEmitter<number>();
+  // @Output() deleteColumnEvent = new EventEmitter<number>();
 
-  deleteColumn(id: number) {
-    this.deleteColumnEvent.emit(id);
+  // deleteColumn(id: number) {
+  //   this.deleteColumnEvent.emit(id);
+  // }
+
+  // showDeleteButton: boolean = false;
+
+  @Output()
+  changeTitleEvent = new EventEmitter<string>();
+  onChangeTitle(event) {
+    this.changeTitleEvent.emit(event.target.value);
   }
 
-  addEmptyItem() {
-    this.items.push({
-      id: 0,
-      title: '',
-      position: 0,
-      timestamp: '',
-    });
+  deleteFunction(item: ItemModel) {
+    this.items.splice(this.items.indexOf(item), 1);
   }
-
-  showDeleteButton: boolean = false;
 }

@@ -3,3 +3,14 @@
 .bgr {
   background-color: #2b8332;
 }
+
+input {
+  border: none;
+  background-color: transparent;
+  margin: 0;
+  padding: 0;
+}
+
+input:focus {
+  outline: none !important;
+}

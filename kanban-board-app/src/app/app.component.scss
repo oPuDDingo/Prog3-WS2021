@@ -21,6 +21,22 @@ p {
   margin: 0;
 }
 
+.title {
+  height: 10%;
+  width: 10%;
+  padding: 1%;
+  margin-left: 50px;
+  margin-top: 60px;
+  font-weight: 600;
+  font-size: 200%;
+  // clear: both;
+  // display: inline-block;
+  // overflow: hidden;
+  white-space: nowrap;
+  // transform: translate(280%, 10%);
+  align-self: center;
+}
+
 .content {
   display: flex;
   margin: 82px auto 32px;

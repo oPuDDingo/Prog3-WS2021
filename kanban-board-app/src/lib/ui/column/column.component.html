@@ -1,17 +1,14 @@
 
 <div class="card-container">
-  <div class="title"
-  (mouseover)="showDeleteButton = true"
-  (mouseleave)="showDeleteButton = false"
-  >{{title}}  {{id}}
-  <img
-      *ngIf="showDeleteButton"
-      (click)="deleteColumn(id)"
-      class="delete-icon"
-      src="https://mpng.subpng.com/20210118/rfe/transparent-garbage-icon-trash-icon-60053885a9b151.9234442016109548856951.jpg"
-    />
-
-</div>
-  <item *ngFor="let item of items" [title]="item.title"></item>
+  <div class="title">
+    <input id="columnTitleInput" placeholder="GHOSTMOVES" (change)="onChangeTitle($event)">
+  </div>
+  <item *ngFor="let item of items" [title]="item.title">
+    <button class="deleteColumnButton" (click)="deleteFunction(column)">
+      <input type="image" id="deleteButton"
+          src="https://static.vecteezy.com/system/resources/previews/004/647/861/original/illustration-of-the-ghost-throwing-garbage-in-the-trash-can-vector.jpg"
+          width="40px" />
+    </button>
+  </item>
 </div>
 

@@ -1,13 +1,22 @@
 <div class="board">
-  <div class="title">{{title}}</div>
+
   <div *ngFor="let column of columns">
-    <column [title]="column.name" [items]="column.items"></column>
+    <column [title]="column.name" [items]="column.items" (changeTitleEvent)=changeTitle(column,$event)></column>
     <!-- <div class="addButton"> -->
-    <button>
-      <input type="image" id="addButton" onclick="addFunction()"
+    <button class="addColumnButton"(click)="addItem(column)">
+      <input type="image"
         src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fclipart-library.com%2Fimages_k%2Ftransparent-cute%2Ftransparent-cute-5.png&f=1&nofb=1"
         width="40px" />
     </button>
+    <button class="deleteColumnButton" (click)="deleteFunction(column)">
+
+    </button>
     <!-- </div> onclick="addFunction()" -->
   </div>
+  <button (click)="addFunction()">
+    <input type="image"
+        src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fclipart-library.com%2Fimages_k%2Ftransparent-cute%2Ftransparent-cute-5.png&f=1&nofb=1"
+        width="40px" />
+  </button>
+
 </div>

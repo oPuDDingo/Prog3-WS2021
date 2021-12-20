@@ -3,24 +3,9 @@
   background-color: #89c779;
   border-radius: 100px;
   align-items: flex-start;
-  margin-top: 100px;
-  height: 80px;
+  margin-top: 20px;
+  height: 50px;
   // justify-content: center;
-}
-
-.title {
-  height: 10%;
-  width: 10%;
-  padding: 1%;
-  margin-left: 50px;
-  margin-top: 10px;
-  font-weight: 600;
-  font-size: 200%;
-  // clear: both;
-  // display: inline-block;
-  // overflow: hidden;
-  white-space: nowrap;
-  transform: translate(280%, 10%);
 }
 
 // .title:hover {
@@ -29,17 +14,23 @@
 
 // }
 
-#myimage {
-  height: 80px;
-  width: 100px;
-  border-radius: 300px;
-}
+// #myimage {
+//   height: 80px;
+//   width: 100px;
+//   border-radius: 300px;
+// }
 
 button {
   border-radius: 300px;
-  margin-left: 100px;
 }
 
-// function #addFunction(){
-
+// .addColumnButton {
 // }
+
+.deleteColumnButton {
+  background-image: url(https://static.vecteezy.com/system/resources/previews/004/647/861/original/illustration-of-the-ghost-throwing-garbage-in-the-trash-can-vector.jpg);
+  border-radius: 50px;
+  height: 50px;
+  width: 40px;
+  margin-left: 130px;
+}
